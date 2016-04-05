@@ -3,7 +3,8 @@ var builder = require('botbuilder');
 
 var server = restify.createServer();
 
-var bot = new builder.TextBot();
+// var bot = new builder.TextBot();
+var bot = new builder.BotConnectorBot();
 
 bot.add('/', [
     function (session) {
