@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/fczuardi/hellobot/issues"
   },
-  "homepage": "https://github.com/fczuardi/hellobot#readme"
+  "homepage": "https://github.com/fczuardi/hellobot#readme",
+  "devDependencies": {
+    "botbuilder": "^0.6.5"
+  }
 }
