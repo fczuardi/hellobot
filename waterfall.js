@@ -1,12 +1,12 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 
-var server = restify.createServer();
+console.log('process.env.BOT_ENV', process.env.BOT_ENV);
 
-// var bot = new builder.TextBot();
-var bot = new builder.BotConnectorBot();
+var myTextBot = new builder.TextBot();
+var myConnectorBot = new builder.BotConnectorBot();
 
-bot.add('/', [
+var mainDialog = [
     function (session) {
         session.dialogData.answers = [];
         builder.Prompts.text(session, 'Hello');
@@ -31,19 +31,26 @@ bot.add('/', [
             session.send('Ok, again then…');
         }
     }
-]);
+];
 
-// bot.listenStdin();
+switch (process.env.BOT_ENV){
+    case 'dev':
+        myTextBot.add('/', mainDialog);
+        myTextBot.listenStdin();
+        break;
+    default:
+        var server = restify.createServer();
+        console.log(process.env.APP_ID);
+        console.log(process.env.APP_SECRET);
 
-console.log(process.env.APP_ID);
-console.log(process.env.APP_SECRET);
-
-server.use(bot.verifyBotFramework({
-    appId: process.env.APP_ID,
-    appSecret: process.env.APP_SECRET })
-);
-server.post('/v1/messages', bot.listen());
-
-server.listen(8080, function () {
-    console.log('%s listening to %s', server.name, server.url);
-});
+        myConnectorBot.add('/', mainDialog);
+        server.use(myConnectorBot.verifyBotFramework({
+            appId: process.env.APP_ID,
+            appSecret: process.env.APP_SECRET })
+        );
+        server.post('/v1/messages', myConnectorBot.listen());
+        server.listen(8080, function () {
+            console.log('%s listening to %s', server.name, server.url);
+        });
+        break;
+}
