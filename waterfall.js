@@ -35,6 +35,9 @@ bot.add('/', [
 
 // bot.listenStdin();
 
+console.log(process.env.APP_ID);
+console.log(process.env.APP_SECRET);
+
 server.use(bot.verifyBotFramework({
     appId: process.env.APP_ID,
     appSecret: process.env.APP_SECRET })
