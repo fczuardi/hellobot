@@ -33,9 +33,15 @@ var mainDialog = [
     }
 ];
 
+var muteDialog = [
+    function(session){
+        return null;
+    }
+]
+
 switch (process.env.BOT_ENV){
     case 'dev':
-        myTextBot.add('/', mainDialog);
+        myTextBot.add('/', muteDialog);
         myTextBot.listenStdin();
         break;
     default:
@@ -43,7 +49,7 @@ switch (process.env.BOT_ENV){
         console.log(process.env.APP_ID);
         console.log(process.env.APP_SECRET);
 
-        myConnectorBot.add('/', mainDialog);
+        myConnectorBot.add('/', muteDialog);
         server.use(myConnectorBot.verifyBotFramework({
             appId: process.env.APP_ID,
             appSecret: process.env.APP_SECRET })
